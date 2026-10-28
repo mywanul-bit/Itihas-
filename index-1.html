@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ইতিহাসের পাতা</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@500;700&family=Hind+Siliguri:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#12303a;--card:#eef0ed;--ink:#17262b;--muted:#5b6b70;--accent:#b9791f;--line:#c9d0cd;--err:#a23a2a;--ok:#2e6b4a}
+@media (prefers-color-scheme:dark){:root{--bg:#0b1d23;--card:#1c2c32;--ink:#e8eeec;--muted:#9fb0b4;--line:#38494f;--accent:#e0a14a;--err:#ff8f7a;--ok:#7fd1a2}}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);font-family:"Hind Siliguri","Noto Sans Bengali",system-ui,sans-serif;color:var(--ink);display:flex;align-items:center;justify-content:center;padding:20px}
+main{width:100%;max-width:400px}
+h1{font-family:"Noto Serif Bengali",Georgia,serif;font-size:2rem;margin:0 0 6px;color:#f3efe4;line-height:1.3}
+.sub{color:#b8c7c9;margin:0 0 22px;line-height:1.6}
+.card{background:var(--card);border-radius:10px;padding:24px;border-top:4px solid var(--accent)}
+h2{font-family:"Noto Serif Bengali",Georgia,serif;font-size:1.25rem;margin:0 0 16px}
+label{display:block;font-weight:500;margin:14px 0 6px}
+input{width:100%;font:inherit;font-size:1.05rem;padding:12px;border:1.5px solid var(--line);border-radius:6px;background:transparent;color:var(--ink)}
+input:focus{outline:3px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+.row{display:flex;gap:8px}.row #cc{width:96px;flex:none;text-align:center}
+.hint{font-size:.88rem;color:var(--muted);margin-top:6px}
+button{font:inherit;font-weight:600;width:100%;margin-top:20px;padding:13px;border:0;border-radius:6px;background:var(--accent);color:#1b1305;cursor:pointer}
+button:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+button.link{background:none;color:var(--muted);margin-top:10px;padding:8px;text-decoration:underline;font-weight:500}
+button:disabled{opacity:.5;cursor:default}
+.err{color:var(--err);font-size:.92rem;min-height:1.3em;margin-top:10px}
+#otp{text-align:center;font-size:1.6rem;letter-spacing:.5em;padding-left:.5em}
+.hidden{display:none}
+.done{text-align:center}.done p{color:var(--ok);font-weight:600;font-size:1.1rem}
+</style>
+</head>
+<body>
+<main>
+  <h1>ইতিহাসের পাতা</h1>
+  <p class="sub">অতীতের গল্প পড়তে আপনার মোবাইল নম্বর দিয়ে লগইন করুন।</p>
+
+  <div class="card">
+    <section id="s1">
+      <h2>লগইন</h2>
+      <label for="phone">মোবাইল নম্বর</label>
+      <div class="row">
+        <input id="cc" type="text" list="ccl" value="+880" maxlength="5" aria-label="দেশের কোড">
+        <input id="phone" type="tel" inputmode="numeric" autocomplete="tel-national" maxlength="15" placeholder="1XXXXXXXXX" aria-label="মোবাইল নম্বর">
+      </div>
+      <datalist id="ccl"><option value="+880" label="বাংলাদেশ"><option value="+91" label="ভারত"><option value="+92" label="পাকিস্তান"><option value="+977" label="নেপাল"><option value="+94" label="শ্রীলঙ্কা"><option value="+1" label="যুক্তরাষ্ট্র/কানাডা"><option value="+44" label="যুক্তরাজ্য"><option value="+971" label="সংযুক্ত আরব আমিরাত"><option value="+966" label="সৌদি আরব"><option value="+974" label="কাতার"><option value="+965" label="কুয়েত"><option value="+968" label="ওমান"><option value="+60" label="মালয়েশিয়া"><option value="+65" label="সিঙ্গাপুর"><option value="+61" label="অস্ট্রেলিয়া"><option value="+49" label="জার্মানি"><option value="+33" label="ফ্রান্স"><option value="+39" label="ইতালি"><option value="+81" label="জাপান"><option value="+86" label="চীন"><option value="+82" label="দক্ষিণ কোরিয়া"><option value="+90" label="তুরস্ক"><option value="+7" label="রাশিয়া"><option value="+55" label="ব্রাজিল"><option value="+20" label="মিশর"><option value="+27" label="দক্ষিণ আফ্রিকা"></datalist>
+      <div class="hint">দেশের কোড বদলাতে বাঁয়ের ঘরে লিখুন বা তালিকা থেকে বেছে নিন।</div>
+      <div class="err" id="e1" role="alert"></div>
+      <button id="send">কোড পাঠান</button>
+    </section>
+
+    <section id="s2" class="hidden">
+      <h2>কোড দিন</h2>
+      <p class="hint" style="margin-top:0"><b id="shown"></b> নম্বরে ৬ সংখ্যার কোড পাঠানো হয়েছে।</p>
+      <label for="otp">যাচাইকরণ কোড</label>
+      <input id="otp" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="••••••">
+      <div class="err" id="e2" role="alert"></div>
+      <button id="verify">যাচাই করুন</button>
+      <button class="link" id="resend" disabled>আবার কোড পাঠান</button>
+      <button class="link" id="back">নম্বর পরিবর্তন করুন</button>
+    </section>
+
+    <section id="s3" class="hidden done">
+      <h2>স্বাগতম!</h2>
+      <p>লগইন সফল হয়েছে।</p>
+      <div class="hint" id="who"></div>
+      <div class="hint">এরপর এখানে ইতিহাসের তথ্যের পাতা যুক্ত হবে।</div>
+      <button id="out">লগআউট</button>
+    </section>
+  </div>
+  <div id="rc"></div>
+</main>
+
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import {getAuth,RecaptchaVerifier,signInWithPhoneNumber,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+
+const app=initializeApp({
+  apiKey:"AIzaSyC59TAld7Iq3N7ifBOxjw7xig1natvnJzo",
+  authDomain:"my-bot-e84de.firebaseapp.com",
+  projectId:"my-bot-e84de",
+  storageBucket:"my-bot-e84de.firebasestorage.app",
+  messagingSenderId:"472313948501",
+  appId:"1:472313948501:web:f434b055c07117f13c67dc"
+});
+const auth=getAuth(app);
+auth.useDeviceLanguage();
+
+const $=i=>document.getElementById(i);
+let confirmation=null,full="",rv=null,timer=null;
+const bn=n=>String(n).replace(/\d/g,d=>"০১২৩৪৫৬৭৮৯"[d]);
+const en=s=>s.replace(/[০-৯]/g,d=>"০১২৩৪৫৬৭৮৯".indexOf(d));
+const show=id=>["s1","s2","s3"].forEach(s=>$(s).classList.toggle("hidden",s!==id));
+
+const MSG={
+  "auth/invalid-phone-number":"নম্বরটি সঠিক নয়। দেশের কোড ও নম্বর আবার দেখুন।",
+  "auth/too-many-requests":"অনেকবার চেষ্টা হয়েছে। কিছুক্ষণ পরে আবার চেষ্টা করুন।",
+  "auth/invalid-verification-code":"কোড মেলেনি। আবার চেষ্টা করুন।",
+  "auth/code-expired":"কোডের মেয়াদ শেষ। নতুন কোড নিন।",
+  "auth/operation-not-allowed":"এই দেশের নম্বরে এসএমএস এখন বন্ধ আছে।",
+  "auth/billing-not-enabled":"সাইটের বিলিং চালু নেই। প্রশাসককে জানান।",
+  "auth/network-request-failed":"ইন্টারনেট সংযোগ পরীক্ষা করুন।",
+  "auth/captcha-check-failed":"যাচাই ব্যর্থ হয়েছে। পেজ রিফ্রেশ করে আবার চেষ্টা করুন।",
+  "auth/unauthorized-domain":"এই ডোমেইন Firebase-এ অনুমোদিত নয়।"
+};
+const msg=e=>MSG[e&&e.code]||("কিছু একটা ভুল হয়েছে ("+(e&&e.code||"অজানা")+")।");
+
+function cooldown(s){const b=$("resend");clearTimeout(timer);b.disabled=true;
+  (function tick(){if(s<=0){b.textContent="আবার কোড পাঠান";b.disabled=false;return}
+    b.textContent=bn(s)+" সেকেন্ড পরে আবার পাঠান";s--;timer=setTimeout(tick,1000)})()}
+
+async function sendCode(errBox){
+  errBox.textContent="";
+  try{
+    if(rv){try{rv.clear()}catch(_){}}
+    $("rc").innerHTML="";
+    rv=new RecaptchaVerifier(auth,"rc",{size:"invisible"});
+    confirmation=await signInWithPhoneNumber(auth,full,rv);
+    return true;
+  }catch(e){errBox.textContent=msg(e);return false}
+}
+
+$("send").onclick=async()=>{
+  const c=en($("cc").value).replace(/\D/g,""),l=en($("phone").value).replace(/\D/g,"").replace(/^0+/,"");
+  if(c.length<1||c.length>3){$("e1").textContent="সঠিক দেশের কোড দিন (যেমন +880)।";return}
+  if(l.length<6||c.length+l.length>15){$("e1").textContent="সঠিক মোবাইল নম্বর দিন। শুরুর ০ বাদ দিয়েও লিখতে পারেন।";return}
+  full="+"+c+l;
+  $("send").disabled=true;$("send").textContent="পাঠানো হচ্ছে…";
+  const ok=await sendCode($("e1"));
+  $("send").disabled=false;$("send").textContent="কোড পাঠান";
+  if(ok){$("shown").textContent=bn("+"+c+" ****"+l.slice(-3));$("otp").value="";$("e2").textContent="";show("s2");$("otp").focus();cooldown(30)}
+};
+
+$("verify").onclick=async()=>{
+  const v=en($("otp").value.trim());
+  if(v.length!==6){$("e2").textContent="৬ সংখ্যার কোডটি লিখুন।";return}
+  $("verify").disabled=true;
+  try{await confirmation.confirm(v);$("e2").textContent=""}
+  catch(e){$("e2").textContent=msg(e)}
+  $("verify").disabled=false;
+};
+
+$("resend").onclick=async()=>{
+  $("resend").disabled=true;
+  if(await sendCode($("e2"))){$("otp").value="";cooldown(30)}else{$("resend").disabled=false}
+};
+$("back").onclick=()=>{clearTimeout(timer);show("s1")};
+$("out").onclick=()=>signOut(auth);
+
+onAuthStateChanged(auth,u=>{
+  if(u){clearTimeout(timer);$("who").textContent=bn(u.phoneNumber||"");show("s3")}
+  else{show("s1")}
+});
+
+$("phone").addEventListener("keydown",e=>{if(e.key==="Enter")$("send").click()});
+$("otp").addEventListener("keydown",e=>{if(e.key==="Enter")$("verify").click()});
+</script>
+</body>
+</html>
